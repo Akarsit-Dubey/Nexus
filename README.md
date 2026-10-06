@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NEXUS — Personal Developer Command Center
 
-## Getting Started
+> **Personal developer command center with an interactive developer universe.**
 
-First, run the development server:
+**NEXUS** is a fast, calm, and polished personal developer command center designed around **Akarsit Dubey**'s work, active projects, GitHub repositories, and engineering goals.
 
+Instead of an overwhelming, chaotic wall of dozens of simultaneous graph nodes, NEXUS provides a clean, information-dense developer dashboard as the primary experience, coupled with a curated, clustered, and interactive digital universe graph for deep-dive visual exploration.
+
+---
+
+## 🧭 Core Architectural Pillars
+
+1. **Clarity & Restraint**: A modern developer aesthetic inspired by tools like Linear, Raycast, and Vercel. Dark obsidian theme, subtle borders, high contrast, crisp typography, and zero distracting neon clutter.
+2. **Dashboard as the Core**: The **Overview (`/`)** dashboard greets the user, displays core statistics, visualizes the 52-week GitHub contribution heatmap, features active projects, and embeds an interactive universe snapshot.
+3. **Curated & Clustered Universe (`/universe`)**:
+   - Initial graph loads only **5–12 essential nodes** (Developer Core, Featured Projects, and Smart Clusters).
+   - **Collapsible Cluster Nodes** (e.g. `Frontend Stack · 4`, `Languages & Systems · 3`, `Active Targets · 2`) keep the canvas uncluttered. Clicking a cluster expands its child nodes smoothly without layout lag.
+   - **Project Focus Mode**: Selecting any project illuminates only that project, its direct dependencies (stack, repository, milestone), and dims or hides unrelated nodes. Includes prominent `[Focus Mode: Project]` and `[Exit Focus]` controls.
+4. **First-Class Authenticated GitHub Personalization**:
+   - Automatically connected to **@Akarsit-Dubey** with real repositories (`Forge-UI`, `E-Commerce-Website`, `C-Basic-Projects`, `Akarsit-Dubey`), avatars, follower metrics, and language breakdowns.
+   - Secondary "Switch Account" dialog available for external audits without dominating the main UI.
+   - Secure server-side `/api/github` route with zero token leakage.
+5. **Streamlined 6-Item Navigation**:
+   - **Overview** (`/`): Personalized greeting, metrics, contribution heatmap, recent projects, universe snapshot.
+   - **Universe** (`/universe`): 2D interactive clustered flow graph with Focus Mode, filters, and node inspector.
+   - **Projects** (`/projects`): Clean project catalog with status filters and detail drawer featuring a contextual micro-graph.
+   - **GitHub** (`/github`): Full GitHub dashboard with language distribution, verified contribution matrix, and repositories.
+   - **Goals** (`/goals`): Active engineering targets with progress sliders, deadlines, and linked technology tags.
+   - **Settings** (`/settings`): Theme (Dark/Light/System), accent colors, reduced motion, and account management.
+6. **Global Command Palette (`⌘K` / `Ctrl+K`)**:
+   - Instant search across projects, repositories, goals, and system navigation actions.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| :--- | :--- |
+| **Framework** | Next.js (App Router, Turbopack) |
+| **UI Library** | React 19, TypeScript (strict mode) |
+| **Styling** | Tailwind CSS v4, custom CSS variables |
+| **Graph Engine** | `@xyflow/react` (React Flow) with memoized node types |
+| **State Management** | Zustand (modular domain stores) |
+| **Icons & Motion** | Lucide React, Framer Motion |
+| **Backend Integration**| Secure Next.js Route Handlers (`/api/github`) |
+
+---
+
+## ⌨️ Command Center Shortcuts
+
+| Key | Action |
+| :--- | :--- |
+| `⌘ + K` / `Ctrl + K` | Global Command Palette & search |
+| `Esc` | Deselect active node / Exit Focus Mode / Close drawer |
+| `0` | Fit universe graph to viewport |
+
+---
+
+## 🚀 Getting Started
+
+### Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone or navigate to directory
+cd Nexus
+
+# Install dependencies
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Production Build
+```bash
+npm run build
+npm run start
+```
+*Production build compiles in ~1.9s with 0 TypeScript or lint errors.*
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+MIT © Akarsit Dubey / NEXUS Team.

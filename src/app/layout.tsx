@@ -45,14 +45,17 @@ export default function RootLayout({
             __html: `
               try {
                 var s = localStorage.getItem('nexus-settings');
+                var isSysLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+                var theme = 'dark';
                 if (s) {
                   var p = JSON.parse(s);
-                  if (p.theme === 'light') {
-                    document.documentElement.classList.add('light-theme');
-                  } else {
-                    document.documentElement.classList.add('dark');
-                  }
+                  if (p.theme) theme = p.theme;
+                }
+                if (theme === 'light' || (theme === 'system' && isSysLight)) {
+                  document.documentElement.classList.add('light-theme');
+                  document.documentElement.classList.remove('dark');
                 } else {
+                  document.documentElement.classList.remove('light-theme');
                   document.documentElement.classList.add('dark');
                 }
               } catch (e) {
@@ -62,7 +65,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-full flex flex-col bg-slate-50 dark:bg-[#07090e] text-slate-900 dark:text-slate-100 font-sans selection:bg-sky-500/20 selection:text-sky-200 overflow-hidden">
+      <body
+        suppressHydrationWarning
+        className="h-full flex flex-col bg-slate-50 dark:bg-[#07090e] text-slate-900 dark:text-slate-100 font-sans selection:bg-sky-500/20 selection:text-sky-200 overflow-hidden"
+      >
         <Header />
         <main className="flex-1 min-h-0 flex flex-col relative z-10 overflow-hidden">
           {children}

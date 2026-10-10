@@ -4,8 +4,8 @@ import React from 'react';
 import { useSettingsStore } from '@/stores/settings-store';
 
 export const UniverseBackground = () => {
-  const theme = useSettingsStore((s) => s.settings.theme);
-  const isLight = theme === 'light';
+  const resolvedTheme = useSettingsStore((s) => s.resolvedTheme);
+  const isLight = resolvedTheme === 'light';
 
   return (
     <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

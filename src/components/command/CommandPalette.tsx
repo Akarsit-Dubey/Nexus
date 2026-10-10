@@ -36,7 +36,7 @@ export const CommandPalette = () => {
   const repos = useGithubStore((s) => s.repos);
   const goals = useGoalStore((s) => s.goals);
   const { enterFocusMode, resetUniverse } = useUniverseStore();
-  const { settings, updateSetting } = useSettingsStore();
+  const { settings, updateSetting, resolvedTheme } = useSettingsStore();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -108,10 +108,10 @@ export const CommandPalette = () => {
     },
     {
       id: 'act-theme',
-      label: `Switch to ${settings.theme === 'dark' ? 'Light' : 'Dark'} Theme`,
+      label: `Switch to ${resolvedTheme === 'dark' ? 'Light' : 'Dark'} Theme`,
       category: 'Preferences',
-      icon: settings.theme === 'dark' ? Sun : Moon,
-      perform: () => updateSetting('theme', settings.theme === 'dark' ? 'light' : 'dark'),
+      icon: resolvedTheme === 'dark' ? Sun : Moon,
+      perform: () => updateSetting('theme', resolvedTheme === 'dark' ? 'light' : 'dark'),
     },
     {
       id: 'act-reset',

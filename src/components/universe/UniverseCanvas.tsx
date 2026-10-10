@@ -29,8 +29,8 @@ const FILTER_TYPES: { type: NodeType; label: string }[] = [
 
 const CanvasInner = () => {
   const [showFiltersModal, setShowFiltersModal] = useState(false);
-  const theme = useSettingsStore((s) => s.settings.theme);
-  const isLight = theme === 'light';
+  const resolvedTheme = useSettingsStore((s) => s.resolvedTheme);
+  const isLight = resolvedTheme === 'light';
   const {
     nodes,
     edges,

@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils';
 
 export const Header = () => {
   const pathname = usePathname();
-  const { settings, updateSetting, initializeSettings } = useSettingsStore();
+  const { settings, updateSetting, initializeSettings, resolvedTheme } = useSettingsStore();
   const user = useGithubStore((s) => s.user);
 
   useEffect(() => {
@@ -99,12 +99,12 @@ export const Header = () => {
           {/* Theme Toggle */}
           <button
             onClick={() =>
-              updateSetting('theme', settings.theme === 'dark' ? 'light' : 'dark')
+              updateSetting('theme', resolvedTheme === 'dark' ? 'light' : 'dark')
             }
-            title={settings.theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+            title={resolvedTheme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
             className="p-1.5 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800/60 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
           >
-            {settings.theme === 'dark' ? (
+            {resolvedTheme === 'dark' ? (
               <Sun className="h-4 w-4 text-amber-400" />
             ) : (
               <Moon className="h-4 w-4 text-slate-700" />

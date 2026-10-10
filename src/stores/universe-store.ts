@@ -13,6 +13,7 @@ import {
   INITIAL_UNIVERSE_EDGES,
   CLUSTER_CHILDREN,
 } from '@/data/demo-data';
+import { useProjectStore } from '@/stores/project-store';
 
 interface UniverseState {
   nodes: Node<NexusNodeData>[];
@@ -113,9 +114,62 @@ function computeHighlighting(
   return { nodes: updatedNodes, edges: updatedEdges };
 }
 
+function ensureProjectNodeExists(
+  nodes: Node<NexusNodeData>[],
+  edges: Edge[],
+  projectId: string
+): { nodes: Node<NexusNodeData>[]; edges: Edge[] } {
+  if (nodes.some((n) => n.id === projectId)) {
+    return { nodes, edges };
+  }
+
+  const project = useProjectStore.getState().projects.find((p) => p.id === projectId);
+  if (!project) {
+    return { nodes, edges };
+  }
+
+  const angle = -Math.PI / 4 + (nodes.length * 0.75);
+  const radius = 230;
+  const newNode: Node<NexusNodeData> = {
+    id: project.id,
+    type: 'project',
+    position: {
+      x: Math.round(Math.cos(angle) * radius),
+      y: Math.round(Math.sin(angle) * radius),
+    },
+    data: {
+      id: project.id,
+      label: project.title,
+      type: 'project',
+      description: project.description,
+      status: project.status,
+      progress: project.progress,
+      tags: project.technologies,
+      metrics: {
+        githubUrl: project.githubUrl,
+        liveUrl: project.liveUrl,
+      },
+      relatedIds: ['user-core'],
+    },
+  };
+
+  const newEdge: Edge = {
+    id: `e-user-${project.id}`,
+    source: 'user-core',
+    target: project.id,
+    type: 'default',
+    style: { stroke: 'rgba(168, 85, 247, 0.4)', strokeWidth: 1.5 },
+  };
+
+  return {
+    nodes: [...nodes, newNode],
+    edges: [...edges, newEdge],
+  };
+}
+
 export const useUniverseStore = create<UniverseState>((set, get) => ({
-  nodes: INITIAL_UNIVERSE_NODES,
-  edges: INITIAL_UNIVERSE_EDGES,
+  nodes: JSON.parse(JSON.stringify(INITIAL_UNIVERSE_NODES)),
+  edges: JSON.parse(JSON.stringify(INITIAL_UNIVERSE_EDGES)),
   selectedNodeId: null,
   focusedProjectId: null,
   activeFilters: [],
@@ -141,9 +195,19 @@ export const useUniverseStore = create<UniverseState>((set, get) => ({
   setSelectedNodeId: (id) => {
     const { nodes, edges, activeFilters, focusedProjectId } = get();
     const isInspectorOpen = id !== null;
+
+    let currentNodes = nodes;
+    let currentEdges = edges;
+
+    if (id) {
+      const ensured = ensureProjectNodeExists(nodes, edges, id);
+      currentNodes = ensured.nodes;
+      currentEdges = ensured.edges;
+    }
+
     const { nodes: updatedNodes, edges: updatedEdges } = computeHighlighting(
-      nodes,
-      edges,
+      currentNodes,
+      currentEdges,
       id,
       focusedProjectId,
       activeFilters
@@ -159,9 +223,12 @@ export const useUniverseStore = create<UniverseState>((set, get) => ({
 
   enterFocusMode: (projectId) => {
     const { nodes, edges, activeFilters } = get();
+
+    const ensured = ensureProjectNodeExists(nodes, edges, projectId);
+
     const { nodes: updatedNodes, edges: updatedEdges } = computeHighlighting(
-      nodes,
-      edges,
+      ensured.nodes,
+      ensured.edges,
       projectId,
       projectId,
       activeFilters
@@ -326,8 +393,8 @@ export const useUniverseStore = create<UniverseState>((set, get) => ({
 
   resetUniverse: () => {
     set({
-      nodes: INITIAL_UNIVERSE_NODES,
-      edges: INITIAL_UNIVERSE_EDGES,
+      nodes: JSON.parse(JSON.stringify(INITIAL_UNIVERSE_NODES)),
+      edges: JSON.parse(JSON.stringify(INITIAL_UNIVERSE_EDGES)),
       selectedNodeId: null,
       focusedProjectId: null,
       activeFilters: [],
